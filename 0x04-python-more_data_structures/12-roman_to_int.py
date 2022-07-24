@@ -1,45 +1,31 @@
 #!/usr/bin/python3
 def roman_to_int(roman_string):
-    # Fail checks, none, not a string
-    if not roman_string:
+    if not roman_string or type(roman_string) != str:
         return 0
-    if not isinstance(roman_string, str):
-        return 0
-    if not roman_string.isupper():
-        return 0
-    # Dictionary for roman numerals
-    r_dict = {
-        "I": 1,
-        "IV": 4,
-        "V": 5,
-        "IX": 9,
-        "X": 10,
-        "L": 50,
-        "C": 100,
-        "D": 500,
-        "M": 1000
-    }
-
-    result = 0
-    temp = list(roman_string)
-    # Concat 4 and 9s
-    if len(temp) > 1:
-        idx = 0
-        for i in temp:
-            try:
-                if temp[idx] == 'I' and temp[idx + 1] == 'V':
-                    temp[idx:idx + 2] = [''.join(temp[idx:idx + 2])]
-            except IndexError:
-                pass
-            try:
-                if temp[idx] == 'I' and temp[idx + 1] == 'X':
-                    temp[idx:idx + 2] = [''.join(temp[idx:idx + 2])]
-            except IndexError:
-                pass
-            idx += 1
-    # Search in dict for correct numbers and add
-    for k, v in r_dict.items():
-        for index in temp:
-            if index == k:
-                result += v
-    return result
+    number = 0
+    string = roman_string + ' '
+    for i in range(len(string)):
+        if string[i] == 'I':
+            if string[i + 1] == 'V' or string[i + 1] == 'X':
+                number -= 1
+            else:
+                number += 1
+        elif string[i] == 'V':
+            number += 5
+        elif string[i] == 'X':
+            if string[i + 1] == 'L' or string[i + 1] == 'C':
+                number -= 10
+            else:
+                number += 10
+        elif string[i] == 'L':
+            number += 50
+        elif string[i] == 'C':
+            if string[i + 1] == 'D' or string[i + 1] == 'M':
+                number -= 100
+            else:
+                number += 100
+        elif string[i] == 'D':
+            number += 500
+        elif string[i] == 'M':
+            number += 1000
+    return number
